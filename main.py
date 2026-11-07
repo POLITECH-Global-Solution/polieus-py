@@ -6,3 +6,5 @@ PALIEUS - main.py
 - Milena Conegin        - RM
 - Murilo Almeida        - RM
 """
+
+print("hello world")
