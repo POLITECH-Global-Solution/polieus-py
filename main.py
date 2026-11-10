@@ -8,7 +8,8 @@ PALIEUS - main.py
 """
 
 from src import (admin as a,
-                 citizen as c)
+                 citizen as c,
+                 config)
 
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
@@ -28,12 +29,13 @@ def set_name() -> str:
     """Escolhi e trata o nome"""
     while True:
         try:
-            name = console.input("[yellow]Escreva seu nome: [/yellow]").strip()
+            name = console.input("[yellow]Escreva seu nome: [/yellow]").strip().capitalize()
             if name == "":
                 raise ValueError("Nome inválido, não pode ser vazio")
         except Exception as e:
             console.print("[bold red][ERRO][/bold red]: ", e)
         else:
+            config.name = name
             break
 
 def menu_login() -> None:
@@ -41,7 +43,7 @@ def menu_login() -> None:
     name = set_name()
     while True:
         option = inquirer.select(
-            message="Escolha um acesso:",
+            message=f"{config.name}, escolha um tipo de acesso:",
             choices=[
                 Choice(value=1, name="🧑 1. Acesso cidadão"),
                 Choice(value=2, name="🇧🇷  2. Acesso município"),
@@ -61,6 +63,10 @@ def menu_login() -> None:
 def menu_citizen() -> None:
     """Menu com ações para os cidadãos."""
     while True:
+        console.print(Panel.fit(
+            f"[bold]Bem-vindo á área de cidadão {config.name}![/bold]\n"
+            "Aqui você pode realizar ocorrências, e consultar as existentes."
+        ))
         option = inquirer.select(
             message="Selecione uma opção:",
             choices=[
@@ -76,6 +82,10 @@ def menu_citizen() -> None:
 
 def menu_admin() -> None:
     """Menu com ações para a prefeitura/administradora do município."""
+    console.print(Panel.fit(
+        f"[bold]Bem-vindo á área de administrador {config.name}![/bold]\n"
+        "Aqui você pode ver as demandas do povo, ver prioridades e receber auxilio para tomar decisões."
+    ))
     while True:
         option = inquirer.select(
             message="Selecione uma opção:",
