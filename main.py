@@ -53,11 +53,11 @@ def menu_admin() -> int:
     option = inquirer.select(
         message="Selecione uma opção:",
         choices=[
-            Choice(value=2, name="🔍 1. Consultar ocorrências"),
-            Choice(value=3, name="⚡ 2. Analisar prioridades"),
-            Choice(value=4, name="🔄 3. Atualizar situação"),
-            Choice(value=5, name="📊 4. Gerar relatórios"),
-            Choice(value=6, name="🚨 5. Consultar recorrências"),
+            Choice(value=1, name="🔍 1. Consultar ocorrências"),
+            Choice(value=2, name="⚡ 2. Analisar prioridades"),
+            Choice(value=3, name="🔄 3. Atualizar situação"),
+            Choice(value=4, name="📊 4. Gerar relatórios"),
+            Choice(value=5, name="🚨 5. Consultar recorrências"),
             Choice(value=0, name="↩️ 0. Voltar")
         ],
         default=0
@@ -67,23 +67,16 @@ def menu_admin() -> int:
 def menu_ajuda() -> None:
     """Mostra um resumo do nosso programa"""
     console.print(Panel.fit(
-        "Uma plataforma pública voltada para o cidadão e o gestor público, onde os munícipes podem:\n- registras ocorrências;\n- acompanhar o andamento delas;\n- monitorar o orçamento e indicadores da prefeitura.\n E para a perfeitura:\n- Ver ocorrências agrupadas e ter ajuda na classificação, criação de prazos e na prioridade, além de auxílio na gestão da verba."
+        "Uma plataforma pública voltada para o cidadão e o gestor público, onde os munícipes podem:[blue]\n- registras ocorrências;\n- acompanhar o andamento delas;\n- monitorar o orçamento e indicadores da prefeitura.[/blue]\n E para a perfeitura:[blue]\n- Ver ocorrências agrupadas e ter ajuda na classificação, criação de prazos e na prioridade, além de auxílio na gestão da verba.[/blue]"
     ))
-    inquirer.select(
-        choices=[
-            Choice(value=0, name="↩️ 0. Voltar")
-        ],
-        default=0
-    ).execute()
+    input("pressione ENTER para voltar.")
     return
-
 
 def main() -> None:
     """Inicia o programa."""
     show_header()
     while True:
         option = menu_login()
-        print(option)
         if option == 1:
             menu_citizen()
         elif option == 2:
