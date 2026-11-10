@@ -39,5 +39,6 @@ O Panel é pra desenhar um quadrado em volta do texto, eles podem ter `title` e 
 Além disso posso acabar usando o Table (para tabelas) e o ask, que é um input simples.
 
 Se uma estilização for muito repetitiva eu vi que tem como criar classes de estilo guardando em variaveis.
+- Um dia depois fiz isso para logs de aviso, erro e info por exemplo, criando uma variavel estilizada para eles
 
 Estilos: https://rich.readthedocs.io/en/latest/style.html
