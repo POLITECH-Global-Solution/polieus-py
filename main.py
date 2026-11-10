@@ -7,6 +7,8 @@ PALIEUS - main.py
 - Murilo Almeida        - RM
 """
 
+from src import admin, citizen
+
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from rich.console import Console
@@ -33,36 +35,46 @@ def menu_login() -> int:
         ],
         default=0
     ).execute()
-    return int(option)
+    return option
 
-def menu_citizen() -> int:
+def menu_citizen() -> None:
     """Menu com ações para os cidadãos."""
-    option = inquirer.select(
-        message="Selecione uma opção:",
-        choices=[
-            Choice(value=1, name="📝 1. Registrar ocorrência"),
-            Choice(value=2, name="🔍 2. Consultar ocorrências"),
-            Choice(value=0, name="↩️ 0. Voltar")
-        ],
-        default=0
-    ).execute()
-    return int(option)
+    while True:
+        option = inquirer.select(
+            message="Selecione uma opção:",
+            choices=[
+                Choice(value=1, name="📝 1. Registrar ocorrência"),
+                Choice(value=2, name="🔍 2. Consultar ocorrências"),
+                Choice(value=0, name="↩️ 0. Voltar")
+            ],
+            default=0
+        ).execute()
+        if option == 1: print("A") #função de registrar ocorrência
+        elif option == 2: print("B") #função de consultar ocorrências
+        else: break
 
-def menu_admin() -> int:
+def menu_admin() -> None:
     """Menu com ações para a prefeitura/administradora do município."""
-    option = inquirer.select(
-        message="Selecione uma opção:",
-        choices=[
-            Choice(value=1, name="🔍 1. Consultar ocorrências"),
-            Choice(value=2, name="⚡ 2. Analisar prioridades"),
-            Choice(value=3, name="🔄 3. Atualizar situação"),
-            Choice(value=4, name="📊 4. Gerar relatórios"),
-            Choice(value=5, name="🚨 5. Consultar recorrências"),
-            Choice(value=0, name="↩️ 0. Voltar")
-        ],
-        default=0
-    ).execute()
-    return int(option)
+    while True:
+        option = inquirer.select(
+            message="Selecione uma opção:",
+            choices=[
+                Choice(value=1, name="🔍 1. Consultar ocorrências"),
+                Choice(value=2, name="⚡ 2. Analisar prioridades"),
+                Choice(value=3, name="🔄 3. Atualizar situação"),
+                Choice(value=4, name="📊 4. Gerar relatórios"),
+                Choice(value=5, name="🚨 5. Consultar recorrências"),
+                Choice(value=0, name="↩️ 0. Voltar")
+            ],
+            default=0
+        ).execute()
+        match option:
+            case 1: print("1") #função de consultar ocorrências
+            case 2: print("2") #função de analisar prioridade
+            case 3: print("3") #função de analisar situação
+            case 4: print("4") #função de gerar relatórios
+            case 5: print("5") #função de consultar recorrencias
+            case _: break
 
 def menu_ajuda() -> None:
     """Mostra um resumo do nosso programa"""
@@ -70,7 +82,6 @@ def menu_ajuda() -> None:
         "Uma plataforma pública voltada para o cidadão e o gestor público, onde os munícipes podem:[blue]\n- registras ocorrências;\n- acompanhar o andamento delas;\n- monitorar o orçamento e indicadores da prefeitura.[/blue]\n E para a perfeitura:[blue]\n- Ver ocorrências agrupadas e ter ajuda na classificação, criação de prazos e na prioridade, além de auxílio na gestão da verba.[/blue]"
     ))
     input("pressione ENTER para voltar.")
-    return
 
 def main() -> None:
     """Inicia o programa."""
@@ -83,8 +94,7 @@ def main() -> None:
             menu_admin()
         elif option == 3:
             menu_ajuda()
-        else:
-            break
+        else: break
 
 if __name__ == "__main__":
     main()
