@@ -7,7 +7,8 @@ PALIEUS - main.py
 - Murilo Almeida        - RM
 """
 
-from src import admin, citizen
+from src import (admin as a,
+                 citizen as c)
 
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
