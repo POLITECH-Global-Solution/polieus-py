@@ -24,7 +24,7 @@ def show_header() -> None:
         "[dim]Sistema de gestão inteligente para cidades[/dim]"
         ))
 
-def choice_name() -> str:
+def set_name() -> str:
     """Escolhi e trata o nome"""
     while True:
         try:
@@ -36,21 +36,27 @@ def choice_name() -> str:
         else:
             break
 
-def menu_login() -> int:
+def menu_login() -> None:
     """Menu de entrada onde se decidi o tipo de usuário."""
-    name = choice_name()
-    option = inquirer.select(
-        message="Escolha um acesso:",
-        choices=[
-            Choice(value=1, name="🧑 1. Acesso cidadão"),
-            Choice(value=2, name="🇧🇷  2. Acesso município"),
-            Choice(value=3, name="❓ 3. Ajuda"),
-            Choice(value=4, name="♻️ Trocar nome"),
-            Choice(value=0, name="❌ 0. Encerrar")
-        ],
-        default=0
-    ).execute()
-    return option
+    name = set_name()
+    while True:
+        option = inquirer.select(
+            message="Escolha um acesso:",
+            choices=[
+                Choice(value=1, name="🧑 1. Acesso cidadão"),
+                Choice(value=2, name="🇧🇷  2. Acesso município"),
+                Choice(value=3, name="❓ 3. Ajuda"),
+                Choice(value=4, name="♻️  4. Trocar nome"),
+                Choice(value=0, name="❌ 0. Encerrar")
+            ],
+            default=0
+        ).execute()
+        match option:
+            case 1: menu_citizen()
+            case 2: menu_admin()
+            case 3: menu_help()
+            case 4: name = set_name()
+            case 0: break
 
 def menu_citizen() -> None:
     """Menu com ações para os cidadãos."""
@@ -91,7 +97,7 @@ def menu_admin() -> None:
             case 5: print("5") #função de consultar recorrencias
             case _: break
 
-def menu_ajuda() -> None:
+def menu_help() -> None:
     """Mostra um resumo do nosso programa"""
     console.print(Panel.fit(
         "Uma plataforma pública voltada para o cidadão e o gestor público, onde os munícipes podem:[blue]\n- registras ocorrências;\n- acompanhar o andamento delas;\n- monitorar o orçamento e indicadores da prefeitura.[/blue]\n E para a perfeitura:[blue]\n- Ver ocorrências agrupadas e ter ajuda na classificação, criação de prazos e na prioridade, além de auxílio na gestão da verba.[/blue]"
@@ -101,15 +107,7 @@ def menu_ajuda() -> None:
 def main() -> None:
     """Inicia o programa."""
     show_header()
-    while True:
-        option = menu_login()
-        if option == 1:
-            menu_citizen()
-        elif option == 2:
-            menu_admin()
-        elif option == 3:
-            menu_ajuda()
-        else: break
+    menu_login()
 
 if __name__ == "__main__":
     main()
