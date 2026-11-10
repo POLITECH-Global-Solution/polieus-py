@@ -24,15 +24,29 @@ def show_header() -> None:
         "[dim]Sistema de gestão inteligente para cidades[/dim]"
         ))
 
+def choice_name() -> str:
+    """Escolhi e trata o nome"""
+    while True:
+        try:
+            name = console.input("[yellow]Escreva seu nome: [/yellow]").strip()
+            if name == "":
+                raise ValueError("Nome inválido, não pode ser vazio")
+        except Exception as e:
+            console.print("[bold red][ERRO][/bold red]: ", e)
+        else:
+            break
+
 def menu_login() -> int:
     """Menu de entrada onde se decidi o tipo de usuário."""
+    name = choice_name()
     option = inquirer.select(
         message="Escolha um acesso:",
         choices=[
             Choice(value=1, name="🧑 1. Acesso cidadão"),
             Choice(value=2, name="🇧🇷  2. Acesso município"),
             Choice(value=3, name="❓ 3. Ajuda"),
-            Choice(value=4, name="❌ 0. Encerrar")
+            Choice(value=4, name="♻️ Trocar nome"),
+            Choice(value=0, name="❌ 0. Encerrar")
         ],
         default=0
     ).execute()
