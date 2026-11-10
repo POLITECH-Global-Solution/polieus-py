@@ -26,24 +26,41 @@ def show_header() -> None:
         ))
 
 def set_name() -> str:
-    """Escolhi e trata o nome"""
+    """Escolhi e trata o nome, colocando ele numa variável global e retornando ele """
     while True:
         try:
             name = console.input("[yellow]Escreva seu nome: [/yellow]").strip().capitalize()
             if name == "":
                 raise ValueError("Nome inválido, não pode ser vazio")
         except Exception as e:
-            console.print("[bold red][ERRO][/bold red]: ", e)
+            console.print(config.ERROR, e)
         else:
             config.name = name
-            break
+            return name
+
+def change_name() -> str:
+    """Muda um nome globalmente, pedindo confirmação do usuário"""
+    name = config.name
+    set_name()
+    console.print(config.WARN,
+                  f"Tem certeza que deseja mudar o nome de [blue]{name}[/blue] para [blue]{config.name}[/blue]?")
+    proceed = inquirer.confirm(message="Trocar?", default=True).execute()
+    if proceed:
+        name = config.name
+        console.print(config.INFO,
+                      f"Nome trocado para {name}")
+    else:
+        config.name = name
+        console.print(config.INFO,
+                      f"Nome continuou como: {name}")
+    return name
 
 def menu_login() -> None:
     """Menu de entrada onde se decidi o tipo de usuário."""
-    name = set_name()
+    name = config.name
     while True:
         option = inquirer.select(
-            message=f"{config.name}, escolha um tipo de acesso:",
+            message=f"{name}, escolha um tipo de acesso:",
             choices=[
                 Choice(value=1, name="🧑 1. Acesso cidadão"),
                 Choice(value=2, name="🇧🇷  2. Acesso município"),
@@ -57,14 +74,15 @@ def menu_login() -> None:
             case 1: menu_citizen()
             case 2: menu_admin()
             case 3: menu_help()
-            case 4: name = set_name()
+            case 4: name = change_name()
             case 0: break
 
 def menu_citizen() -> None:
     """Menu com ações para os cidadãos."""
+    name = config.name
     while True:
         console.print(Panel.fit(
-            f"[bold]Bem-vindo á área de cidadão {config.name}![/bold]\n"
+            f"[bold]Bem-vindo á área de cidadão {name}![/bold]\n"
             "Aqui você pode realizar ocorrências, e consultar as existentes."
         ))
         option = inquirer.select(
@@ -82,8 +100,9 @@ def menu_citizen() -> None:
 
 def menu_admin() -> None:
     """Menu com ações para a prefeitura/administradora do município."""
+    name = config.name
     console.print(Panel.fit(
-        f"[bold]Bem-vindo á área de administrador {config.name}![/bold]\n"
+        f"[bold]Bem-vindo á área de administrador {name}![/bold]\n"
         "Aqui você pode ver as demandas do povo, ver prioridades e receber auxilio para tomar decisões."
     ))
     while True:
@@ -117,6 +136,7 @@ def menu_help() -> None:
 def main() -> None:
     """Inicia o programa."""
     show_header()
+    set_name()
     menu_login()
 
 if __name__ == "__main__":
