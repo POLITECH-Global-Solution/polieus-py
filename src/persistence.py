@@ -25,4 +25,4 @@ def get_json() -> [{str,str|int|boolean}|None]:
         console.print(ERROR, e)
     return []
 
-print(get_json())
+def set_json() ->
