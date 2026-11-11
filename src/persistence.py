@@ -20,6 +20,7 @@ def get_connection():
     try:
         #conexão com as variaveis
         connection = oracledb.connect(user=USER, password=PASSWORD, dsn=DSN)
+        console.print(INFO, "Conexão aberta!")
         return connection
     except oracledb.Error as e:
         raise ConnectionError(f"Falha na conexão: {e}")
