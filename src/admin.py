@@ -82,7 +82,7 @@ def update_status() -> None:
     # SINCRONIZAR BANCO COM O ARQUIVO
     occurrences = find_all()
     if not occurrences:
-        # ele tem mensagens no persistence, nã preciso criar aqui
+        console.print(WARN,"Ocorrências não foram carregas corretamente")
         return
     protocol = select_protocol()
     if not protocol:
@@ -126,7 +126,7 @@ def group_occurrence(ocurrences:list[dict[str,str]]) -> tuple[dict[str,int],dict
 def generate_reports() -> None:
     ocurrences = find_all()
     if not ocurrences:
-        # ele tem mensagens no persistence, nã preciso criar aqui
+        console.print(WARN,"Ocorrências não foram carregas corretamente, relatório não pôde ser gerado")
         return
     # o total de ocorrencias no banco
     total = len(ocurrences)
