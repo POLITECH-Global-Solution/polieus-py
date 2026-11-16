@@ -81,7 +81,8 @@ def update_status() -> None:
     console.print(Panel.fit("[bold red]🔄 2. ATUALIZAR STATUS DE OCORRÊNCIA[/bold red]"))
     # SINCRONIZAR BANCO COM O ARQUIVO
     occurrences = find_all()
-    if occurrences == None:
+    if not occurrences:
+        # ele tem mensagens no persistence, nã preciso criar aqui
         return
     protocol = select_protocol()
     if not protocol:
@@ -106,3 +107,59 @@ def update_status() -> None:
             occurrence["st_ocorrencia"] = option
             console.print(INFO,f"Status de {protocol} atualizado para {option}")
             return
+
+# essa função vai veriicar cada ocorrencia e guardar o bairro e categoria num dicionario
+# esse dicionario vai ter do outro ldo uma qauntidade, então e não existir ele ria mse não adiciona nesse valor
+def group_occurrence(ocurrences:list[dict[str,str]]) -> tuple[dict[str,int],dict[str,int]]:
+    count_neighborhoods = {}
+    count_categories = {}
+    for ocurrence in ocurrences:
+        # pega o nome do bairro, se não existir diz que é NA, e vira contagem também
+        n = ocurrence.get("nm_bairro", "Bairro não informado")
+        # vai adicionar o valor atual, se não houver o deault vai criar um com 0 e o +1 faz virar1
+        count_neighborhoods[n] =  count_neighborhoods.setdefault(n, 0) + 1
+        #mesmo pra categoria
+        c = ocurrence.get("ds_categoria", "Sem categoria")
+        count_categories[c] = count_categories.setdefault(c, 0) + 1
+    return count_neighborhoods,count_categories
+
+def generate_reports() -> None:
+    ocurrences = find_all()
+    if not ocurrences:
+        # ele tem mensagens no persistence, nã preciso criar aqui
+        return
+    # o total de ocorrencias no banco
+    total = len(ocurrences)
+    concluded = 0
+    progress = 0
+    blocked = 0
+    others = 0
+    for occurrence in ocurrences:
+        # classificar po status
+        if occurrence["st_ocorrencia"] == "CONCLUIDA": concluded += 1
+        elif occurrence["st_ocorrencia"] == "EM_EXECUCAO": progress += 1
+        elif occurrence["st_ocorrencia"] == "NAO_APROVADA": blocked += 1
+        else: others +=1
+    # agrupando bairros
+    count_n,count_c = group_occurrence(ocurrences)
+    #formatando pra ficar mais facil
+    neighborhoods = "[bold]OCORRÊNCIAS POR BAIRROS:[/bold]\n"
+    for k,v in count_n:
+        neighborhoods +=f"- {k}:\t{v}\n"
+    categories = "[bold]OCORRÊNCIAS POR CATEGORIAS:[/bold]\n"
+    for k,v in count_c:
+        categories +=f"- {k}:\t{v}\n"
+    # agora mostrar tudo
+    console.print(Panel.fit(
+        "📊 RELATÓRIO DE OCORRÊNCIAS\n"
+        "===============================================\n"
+        f"[bold]TOTAL de ocorrências:[/bold] {total}\n"
+        f"[bold]Concluídas:[/bold]\t\t {concluded}\n"
+        f"[bold]Em andamento:[/bold]\t\t {progress}\n"
+        f"[bold]Não aprovadas:[/bold]\t\t {blocked}\n"
+        f"[bold]Outras:[/bold]\t\t {others}\n"
+        "===============================================\n"
+        f"{neighborhoods}"
+        "===============================================\n"
+        f"{categories}"
+    ))

@@ -129,7 +129,7 @@ def menu_admin() -> None:
         match option:
             case 1: a.consult_occurrence()
             case 2: a.update_status()
-            case 3: print("3")
+            case 3: a.generate_reports()
             case 4: print("4")
             case _: break
 
