@@ -104,7 +104,7 @@ def menu_citizen() -> None:
             ],
             default=0
         ).execute()
-        if option == 1: print("A") #função de registrar ocorrência
+        if option == 1: c.register_occurrence() #função de registrar ocorrência
         elif option == 2: print("B") #função de consultar ocorrências
         else: break
 
