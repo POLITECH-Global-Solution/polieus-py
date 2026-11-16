@@ -81,7 +81,8 @@ def update_status() -> None:
     console.print(Panel.fit("[bold red]🔄 2. ATUALIZAR STATUS DE OCORRÊNCIA[/bold red]"))
     # SINCRONIZAR BANCO COM O ARQUIVO
     occurrences = find_all()
-    if occurrences == None:
+    if not occurrences:
+        console.print(WARN,"Ocorrências não foram carregas corretamente")
         return
     protocol = select_protocol()
     if not protocol:
@@ -106,3 +107,73 @@ def update_status() -> None:
             occurrence["st_ocorrencia"] = option
             console.print(INFO,f"Status de {protocol} atualizado para {option}")
             return
+
+# essa função vai veriicar cada ocorrencia e guardar o bairro e categoria num dicionario
+# esse dicionario vai ter do outro ldo uma qauntidade, então e não existir ele ria mse não adiciona nesse valor
+def group_occurrence(occurrences:list[dict[str,str]]) -> tuple[dict[str,int],dict[str,int]]:
+    count_neighborhoods = {}
+    count_categories = {}
+    for occurrence in occurrences:
+        # pega o nome do bairro, se não existir diz que é NA, e vira contagem também
+        n = occurrence.get("nm_bairro", "Bairro não informado")
+        # vai adicionar o valor atual, se não houver o deault vai criar um com 0 e o +1 faz virar1
+        count_neighborhoods[n] =  count_neighborhoods.setdefault(n, 0) + 1
+        #mesmo pra categoria
+        c = occurrence.get("nm_categoria", "Sem categoria")
+        count_categories[c] = count_categories.setdefault(c, 0) + 1
+    return count_neighborhoods,count_categories
+
+def generate_reports() -> None:
+    occurrences = [
+        {"nm_bairro": "Vila Maria", "nm_categoria": "Pavimentação", "st_ocorrencia": "CONCLUIDA"},
+        {"nm_bairro": "Vila Maria", "nm_categoria": "Pavimentação", "st_ocorrencia": "EM_EXECUCAO"},
+        {"nm_bairro": "Vila Maria", "nm_categoria": "Acessibilidade", "st_ocorrencia": "REGISTRADA"},
+        {"nm_bairro": "Centro", "nm_categoria": "Acessibilidade", "st_ocorrencia": "CONCLUIDA"},
+        {"nm_bairro": "Centro", "nm_categoria": "Iluminação", "st_ocorrencia": "NAO_APROVADA"},
+        {"nm_bairro": "Pinheiros", "nm_categoria": "Saneamento", "st_ocorrencia": "EM_ANALISE"},
+        {"nm_bairro": "Pinheiros", "nm_categoria": "Pavimentação", "st_ocorrencia": "EM_EXECUCAO"},
+        {"nm_bairro": "Mooca", "nm_categoria": "Iluminação", "st_ocorrencia": "APROVADA"},
+    ]
+    if not occurrences:
+        console.print(WARN,"Ocorrências não foram carregas corretamente, relatório não pôde ser gerado")
+        return
+    # o total de ocorrencias no banco
+    total = len(occurrences)
+    concluded = 0
+    progress = 0
+    blocked = 0
+    others = 0
+    for occurrence in occurrences:
+        # classificar po status
+        if occurrence["st_ocorrencia"] == "CONCLUIDA": concluded += 1
+        elif occurrence["st_ocorrencia"] == "EM_EXECUCAO": progress += 1
+        elif occurrence["st_ocorrencia"] == "NAO_APROVADA": blocked += 1
+        else: others +=1
+    # agrupando bairros
+    count_n,count_c = group_occurrence(occurrences)
+
+    #formatando em tabela sem linhas pra ficar mais facil
+    table = Table.grid(expand=True)
+    table.add_column(justify="left")
+    table.add_column(justify="right")
+
+    table.add_row("[bold]TOTAL de ocorrências:[/bold]", str(total))
+    table.add_row("[bold]Concluídas:[/bold]", str(concluded))
+    table.add_row("[bold]Em andamento:[/bold]", str(progress))
+    table.add_row("[bold]Não aprovadas:[/bold]", str(blocked))
+    table.add_row("[bold]Outras:[/bold]", str(others))
+    table.add_row("===============================================")
+
+    table.add_row("[bold]OCORRÊNCIAS POR BAIRROS:[/bold]")
+    for k,v in count_n.items():
+        #tipando o v que tava dando ror por ser int
+        table.add_row(f"- {k}:",str(v))
+    table.add_row("===============================================")
+
+    table.add_row("[bold]OCORRÊNCIAS POR CATEGORIAS:[/bold]")
+    for k,v in count_c.items():
+        #tipando o v que tava dando ror por ser int
+        table.add_row(f"- {k}:",str(v))
+    # agora mostrar tudo
+    console.print(Panel.fit(table))
+    print("Aperte ENTER para continuar...")
