@@ -117,7 +117,7 @@ def register_occurrence() -> None:
     # validando as regras, usando o **kwargs pra desempacotar
     try:
         confirmation, response = valid_occurrence(**occurrence)
-    except Except as e:
+    except Exception as e:
         console.print(ERROR,"Algo deu errado na validação. Corrija os dados e tente novamente: ",e)
     else:
         console.print(INFO,response)
