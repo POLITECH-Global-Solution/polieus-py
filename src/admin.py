@@ -151,25 +151,29 @@ def generate_reports() -> None:
         else: others +=1
     # agrupando bairros
     count_n,count_c = group_occurrence(occurrences)
-    #formatando pra ficar mais facil
-    neighborhoods = "[bold]OCORRÊNCIAS POR BAIRROS:[/bold]\n"
+
+    #formatando em tabela sem linhas pra ficar mais facil
+    table = Table.grid(expand=True)
+    table.add_column(justify="left")
+    table.add_column(justify="right")
+
+    table.add_row("[bold]TOTAL de ocorrências:[/bold]", str(total))
+    table.add_row("[bold]Concluídas:[/bold]", str(concluded))
+    table.add_row("[bold]Em andamento:[/bold]", str(progress))
+    table.add_row("[bold]Não aprovadas:[/bold]", str(blocked))
+    table.add_row("[bold]Outras:[/bold]", str(others))
+    table.add_row("===============================================")
+
+    table.add_row("[bold]OCORRÊNCIAS POR BAIRROS:[/bold]")
     for k,v in count_n.items():
-        neighborhoods +=f"- {k}:\t\t{v}\n"
-    categories = "[bold]OCORRÊNCIAS POR CATEGORIAS:[/bold]\n"
+        #tipando o v que tava dando ror por ser int
+        table.add_row(f"- {k}:",str(v))
+    table.add_row("===============================================")
+
+    table.add_row("[bold]OCORRÊNCIAS POR CATEGORIAS:[/bold]")
     for k,v in count_c.items():
-        categories +=f"- {k}:\t\t{v}\n"
+        #tipando o v que tava dando ror por ser int
+        table.add_row(f"- {k}:",str(v))
     # agora mostrar tudo
-    console.print(Panel.fit(
-        "📊 RELATÓRIO DE OCORRÊNCIAS\n"
-        "===============================================\n"
-        f"[bold]TOTAL de ocorrências:[/bold]\t{total}\n"
-        f"[bold]Concluídas:[/bold]\t\t {concluded}\n"
-        f"[bold]Em andamento:[/bold]\t\t {progress}\n"
-        f"[bold]Não aprovadas:[/bold]\t\t {blocked}\n"
-        f"[bold]Outras:[/bold]\t\t\t {others}\n"
-        "===============================================\n"
-        f"{neighborhoods}"
-        "===============================================\n"
-        f"{categories}"
-    ))
+    console.print(Panel.fit(table))
     print("Aperte ENTER para continuar...")
