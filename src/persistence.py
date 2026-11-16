@@ -4,11 +4,11 @@ import os
 from rich.console import Console
 from dotenv import load_dotenv
 from typing_extensions import Any
-
 from config import ERROR, INFO
 
 console = Console()
 load_dotenv()
+PROTOCOLS_PATH = os.path.join("dados", "protocols.txt")
 
 def get_connection():
     """Tenta conectar ao banco de dados Oracle
@@ -26,6 +26,18 @@ def get_connection():
         raise ConnectionError(f"Falha na conexão: {e}")
     except Exception as e:
         raise Exception(e)
+
+# isso aqui eu peguei na ia como registrado no 012
+def save_protocols(occurrences: list[dict[str, Any]]) -> None:
+    """Reescreve o arquivo .txt com os protocolos atualizados para a busca fuzzy."""
+    os.makedirs(os.path.dirname(PROTOCOLS_PATH), exist_ok=True)
+
+    with open(PROTOCOLS_PATH, "w", encoding="utf-8") as file:
+        for oc in occurrences:
+            # Salva no formato: PRO-2026001 | Vila Maria | Registrada [IA]
+            # vai dar pra pesquisar por bairro e status então
+            line = f"{oc['ds_protocolo']} | {oc['nm_bairro']} | {oc['st_ocorrencia']}\n"
+            file.write(line)
 
 def find_all() -> list[dict[str, Any]] | None:
     """Retorna todas as ocorrências da tabela"""
@@ -62,6 +74,8 @@ def find_all() -> list[dict[str, Any]] | None:
             }
             #guarda esse dicionário na lista
             occurrences.append(occurrence)
+
+        save_protocols(occurrences)
         return occurrences
     except Exception as e:
         #mostra [ERRO] em bold vermelho + mensagem de erro
@@ -95,7 +109,7 @@ def find_by_id(id:int) -> dict[str,Any] | None:
         categories = find_categories()
         #verifica se a lina está vazia, se sim o registro não existe
         if not line:
-            raise Exception("Esse ID não existe!")
+            raise Exception("Esse usuário não existe!")
         occurrence = {
             "cd_ocorrencia": line[0],
             "st_ocorrencia": line[1],
@@ -116,6 +130,54 @@ def find_by_id(id:int) -> dict[str,Any] | None:
             #fecha a conexão dando erro ou não
             con.close()
     return {}
+
+# consulta apenas ocorrencias do cidadão 67 (padrão com dados registrados) no banco
+def find_by_citizen(cd_cidadao:int=67) -> list[dict[str,Any]]:
+    """Retorna todas as ocorrências da tabela do usuário padrão citizen"""
+    con = None
+    try:
+        # pegar uma conexão com a função criada
+        con = get_connection()
+        cursor = con.cursor()
+        # preparando sql
+        sql = """
+              SELECT cd_ocorrencia,st_ocorrencia,ds_protocolo,ds_ocorrencia,
+                     cd_categoria,nm_bairro,ds_endereco,dt_abertura
+              FROM OCORRENCIA WHERE cd_cidadao = :cd_cidadao
+              """
+        params = [cd_cidadao]
+        # pegar todos os dados da tabela, passando o sql
+        cursor.execute(sql, params)
+        #retorna uma 'list of tuples' com os dados que eu quero
+        lines = cursor.fetchall()
+        occurrences = []
+        # para prcurar a categoria correspondente ao pk.
+        categories = find_categories()
+        #guardar os valores de lines
+        for line in lines:
+            #guarda cada coluna em seu respectivo atributo num dicionário
+            occurrence = {
+                "cd_ocorrencia": line[0],
+                "st_ocorrencia": line[1],
+                "ds_protocolo": line[2],
+                "ds_ocorrencia": line[3],
+                "nm_categoria": categories.get(line[4]),
+                "nm_bairro": line[5],
+                "ds_endereco": line[6],
+                "dt_abertura": line[7]
+            }
+            #guarda esse dicionário na lista
+            occurrences.append(occurrence)
+        return occurrences
+    except Exception as e:
+        #mostra [ERRO] em bold vermelho + mensagem de erro
+        console.print(ERROR,e)
+    finally:
+        #serve para garantir que o con nã́o é none
+        if con:
+            #fecha a conexão dando erro ou não
+            con.close()
+    return []
 
 #já pega um dicionário "desempacotando" ele
 def save(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_categoria:str,ds_endereco:str) -> bool:

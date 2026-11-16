@@ -7,7 +7,7 @@ from InquirerPy.base.control import Choice
 from rich.console import Console
 from rich.panel import Panel
 from config import ERROR, WARN, INFO
-from persistence import find_all, find_categories, save
+from persistence import find_all, find_categories, save, find_by_citizen
 from validation import valid_occurrence
 from service import get_address
 from rich.table import Table
@@ -123,6 +123,7 @@ def register_occurrence() -> None:
         console.print(INFO,response)
         save(**occurrence)
 
+# consulta apenas ocorrencias do cidadão citizen no banco
 def create_table() -> Table:
     # vou criar uma tabela com o rich, essa função vai ficarpras colunas/estrutura
     table = Table(title="\n[reverse][bold]Ocorrências[/bold][/reverse]")
@@ -136,10 +137,11 @@ def create_table() -> Table:
 
 def consult_occurrence() -> None:
     """Consulta ocorrências."""
-    occurrences = find_all()
+    # consulta pelo cidadão, no mvp atual já é um registrado (com registro no banco), tano que o param é opcional
+    occurrences = find_by_citizen()
     # aqui vou usar a tabela do rich
     table = create_table()
-    #colocar cada linha da tabela para cada ocororencia
+    #colocar cada linha da tabela para cada ocorrencia
     if not occurrences: console.print(WARN,"Ocorrências não puderam ser carregas")
     for occurrence in occurrences:
         table.add_row(
