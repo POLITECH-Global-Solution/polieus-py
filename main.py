@@ -120,8 +120,8 @@ def menu_admin() -> None:
             choices=[
                 Choice(value=1, name="🔍 1. Consultar ocorrências"),
                 Choice(value=2, name="🔄 2. Atualizar status"),
-                Choice(value=4, name="📊 3. Gerar relatórios"),
-                Choice(value=5, name="🚨 4. Consultar recorrências"),
+                Choice(value=3, name="📊 3. Gerar relatórios"),
+                Choice(value=4, name="🚨 4. Consultar recorrências"),
                 Choice(value=0, name="↩️ 0. Voltar")
             ],
             default=0
