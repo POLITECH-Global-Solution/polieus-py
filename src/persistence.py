@@ -36,19 +36,28 @@ def find_all() -> list[dict[str, Any]] | None:
         cursor = con.cursor()
         # preparando sql
         sql = """
-              SELECT * FROM OCORRENCIA
+              SELECT cd_ocorrencia,st_ocorrencia,ds_protocolo,
+                     ds_ocorrencia,cd_categoria,nm_bairro,ds_endereco 
+              FROM OCORRENCIA
         """
         # pegar todos os dados da tabela, passando o sql
         cursor.execute(sql)
         #retorna uma 'list of tuples' com os dados que eu quero
         lines = cursor.fetchall()
         demands = []
+        # para prcurar a categoria correspondente ao pk.
+        categories = find_categories()
         #guardar os valores de lines
         for line in lines:
             #guarda cada coluna em seu respectivo atributo num dicionário
             demand = {
-                "atr1": line[0],
-                "atr2": line[1]
+                "cd_ocorrencia": line[0],
+                "st_ocorrencia": line[1],
+                "ds_protocolo": line[2],
+                "ds_ocorrencia": line[3],
+                "cd_categoria": categories.get(line[4]),
+                "nm_bairro": line[5],
+                "ds_endereco": line[6]
             }
             #guarda esse dicionário na lista
             demands.append(demand)
@@ -79,12 +88,19 @@ def find_by_id(id:int) -> dict[str,Any] | None:
         cursor.execute(sql,params)
         #retorna apenas uma lista
         line = cursor.fetchone()
+        # para prcurar a categoria correspondente ao pk.
+        categories = find_categories()
         #verifica se a lina está vazia, se sim o registro não existe
         if not line:
             raise Exception("Esse ID não existe!")
         demand = {
-            "atr1": line[0],
-            "atr2": line[1]
+            "cd_ocorrencia": line[0],
+            "st_ocorrencia": line[1],
+            "ds_protocolo": line[2],
+            "ds_ocorrencia": line[3],
+            "cd_categoria": categories.get(line[4]),
+            "nm_bairro": line[5],
+            "ds_endereco": line[6]
         }
         return demand
     except Exception as e:
@@ -194,7 +210,7 @@ def delete(id: int) -> bool:
 
 # serve para o usuário ter as opções das categorias disponiveis e validacao tbm
 # vai retornar a pk e o nome, a pk vai servir dps para trocar o nome por ela
-def find_categories() -> tuple[dict[int,str]]:
+def find_categories() -> dict[int,str]:
     """Retorna todas as categorias da tabela"""
     con = None
     try:
@@ -203,22 +219,16 @@ def find_categories() -> tuple[dict[int,str]]:
         cursor = con.cursor()
         # preparando sql
         sql = """
-              SELECT nm_categoria,cd_categoria FROM CATEGORIA
+              SELECT cd_categoria,nm_categoria FROM CATEGORIA
         """
         # pegar todos os dados da tabela, passando o sql
         cursor.execute(sql)
         #retorna uma 'list of tuples' com os dados que eu quero
         lines = cursor.fetchall()
-        categories = []
-        #guardar os valores de lines
+        categories = {}
         for line in lines:
-            #guarda cada coluna em seu respectivo atributo num dicionário
-            category = {
-                "nm_categoria": line[0],
-                "cd_categoria": line[1]
-            }
-            #guarda esse dicionário na lista
-            categories.append(category)
+            #guarda cada linha como uma cahve e item no dict
+            categories[line[0]] = line[1]
         return categories
     except Exception as e:
         #mostra [ERRO] em bold vermelho + mensagem de erro
