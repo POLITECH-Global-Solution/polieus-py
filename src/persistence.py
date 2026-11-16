@@ -55,7 +55,7 @@ def find_all() -> list[dict[str, Any]] | None:
                 "st_ocorrencia": line[1],
                 "ds_protocolo": line[2],
                 "ds_ocorrencia": line[3],
-                "cd_categoria": categories.get(line[4]),
+                "nm_categoria": categories.get(line[4]),
                 "nm_bairro": line[5],
                 "ds_endereco": line[6],
                 "dt_abertura": line[7]
@@ -101,7 +101,7 @@ def find_by_id(id:int) -> dict[str,Any] | None:
             "st_ocorrencia": line[1],
             "ds_protocolo": line[2],
             "ds_ocorrencia": line[3],
-            "cd_categoria": categories.get(line[4]),
+            "nm_categoria": categories.get(line[4]),
             "nm_bairro": line[5],
             "ds_endereco": line[6],
             "dt_abertura": line[7]
