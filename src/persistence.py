@@ -157,7 +157,7 @@ def save(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_categ
             con.close()
     return False
 
-def update(id: int, atr1:str, atr2:str) -> bool:
+def update(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_categoria:str,ds_endereco:str) -> bool:
     """Retorna uma ocorrência pelo seu ID"""
     con = None
     try:
