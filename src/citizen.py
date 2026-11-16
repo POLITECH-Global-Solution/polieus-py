@@ -8,6 +8,8 @@ from rich.console import Console
 from rich.panel import Panel
 from config import ERROR, WARN, INFO
 from persistence import find_categories
+import re
+import service
 
 console = Console()
 
@@ -24,6 +26,7 @@ def register_occurrence() -> None:
     Por isso eu vou iniciar as valores com  valor PREENCHER 
     '''
     desc = cep = category = 'PREENCHER'
+    address = {}
     completed = False
     while completed == False:
         option = inquirer.select(
@@ -55,9 +58,19 @@ def register_occurrence() -> None:
             # o codifo daqui é quase igual, ele só valida se o CEP existe
             while True:
                 try:
-                    vl = console.input("Digite o CEP: ")
+                    vl = console.input("Digite o CEP (ou SAIR): ").strip()
+                    # previ uma tela infinita presa no cep se dr algum problema
+                    if vl == 'SAIR':
+                        vl = 'PREENCHER'
+                        break
                     if vl == None or vl == "":
                         raise ValueError("O CEP não pode ser vazio")
+                    # pedi para a IA fazer, ele remove traços e espaços
+                    vl = re.sub(r"\D", "", vl)
+                    #agora vou verificar se ele mantem um tamanho de CEP, se não jogar excecao
+                    if vl < 8:
+                        raise ValueError("O CEP tem 8 dígitos. Verifique e tente novamente.")
+                    address = get_address()
                 except Exception as e:
                     console.print(ERROR,e)
                 else:
