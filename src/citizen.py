@@ -9,7 +9,7 @@ from rich.panel import Panel
 from config import ERROR, WARN, INFO
 from persistence import find_categories, save
 from validation import valid_occurrence
-from sevice import get_adress
+from sevice import get_address
 import re
 import random
 

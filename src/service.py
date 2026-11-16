@@ -13,7 +13,7 @@ def get_address(cep:str) -> dict | None:
             case 200:
                 data = response.json()
                 # O ViaCEP retorna HTTP 200 com {"erro": true} quando o CEP não existe na base, isso vai servir para validar ele
-                if dados.get("erro"):
+                if data.get("erro"):
                     raise Exception("CEP inválido")
                 return {
                     #coloca o endreco se nao tiver nada coloca vazio
