@@ -127,7 +127,7 @@ def menu_admin() -> None:
             default=0
         ).execute()
         match option:
-            case 1: print("1")
+            case 1: a.consult_occurrence()
             case 2: print("2")
             case 3: print("3")
             case 4: print("4")

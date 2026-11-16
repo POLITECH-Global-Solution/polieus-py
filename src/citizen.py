@@ -123,6 +123,7 @@ def register_occurrence() -> None:
         console.print(INFO,response)
         save(**occurrence)
 
+# consulta apenas ocorrencias do cidadão citizen no banco
 def create_table() -> Table:
     # vou criar uma tabela com o rich, essa função vai ficarpras colunas/estrutura
     table = Table(title="\n[reverse][bold]Ocorrências[/bold][/reverse]")
@@ -139,7 +140,7 @@ def consult_occurrence() -> None:
     occurrences = find_all()
     # aqui vou usar a tabela do rich
     table = create_table()
-    #colocar cada linha da tabela para cada ocororencia
+    #colocar cada linha da tabela para cada ocorrencia
     if not occurrences: console.print(WARN,"Ocorrências não puderam ser carregas")
     for occurrence in occurrences:
         table.add_row(
