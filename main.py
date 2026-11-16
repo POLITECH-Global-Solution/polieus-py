@@ -7,10 +7,9 @@ PALIEUS - main.py
 - Murilo Almeida        - RM
 """
 
-from src import (admin as a,
-                 citizen as c,
-                 config)
-
+from src import admin as a
+from src import citizen as c
+from src import config
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from rich.console import Console
@@ -105,7 +104,7 @@ def menu_citizen() -> None:
             default=0
         ).execute()
         if option == 1: c.register_occurrence() #função de registrar ocorrência
-        elif option == 2: print("B") #função de consultar ocorrências
+        elif option == 2: c.consult_occurrence() #função de consultar ocorrências
         else: break
 
 def menu_admin() -> None:

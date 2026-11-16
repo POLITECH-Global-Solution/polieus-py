@@ -17,7 +17,7 @@ def get_address(cep:str) -> dict | None:
                     raise Exception("CEP inválido")
                 return {
                     #coloca o endreco se nao tiver nada coloca vazio
-                    "ds_endereco": data.get("ogradouro", "").strip(),
+                    "ds_endereco": data.get("logradouro", "").strip(),
                     "nm_bairro": data.get("bairro", "").strip()
                 }
             case 400:
