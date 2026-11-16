@@ -58,14 +58,14 @@ def insert_category()-> str:
     def categories_choices(x) -> Choice:
         return Choice(value=x, name=x)
     # pega as categorias disponiveis
-    #categories = find_categories().values()
-    categories = ("A", "B", "C")
+    categories = find_categories().values()
     category = inquirer.select(
         message="Escolha uma categoria:",
         # criando uma opção para cada categoria
         choices=list(map(categories_choices,categories)),
         default=0
     ).execute()
+    return category
 
 def register_occurrence() -> None:
     # painel vermelho com bold para separar
