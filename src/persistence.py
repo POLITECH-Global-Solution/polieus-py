@@ -36,7 +36,7 @@ def find_all() -> list[dict[str, Any]] | None:
         cursor = con.cursor()
         # preparando sql
         sql = """
-              SELECT * FROM DEMANDAS
+              SELECT * FROM OCORRENCIA
         """
         # pegar todos os dados da tabela, passando o sql
         cursor.execute(sql)
@@ -72,7 +72,7 @@ def find_by_id(id:int) -> dict[str,Any] | None:
         cursor = con.cursor()
         # preparando sql de select e os parametros necessários
         sql = """
-              SELECT * FROM DEMANDAS WHERE id = :id
+              SELECT * FROM OCORRENCIA WHERE id = :id
         """
         params = [id]
         # pegar todos os dados da tabela passando o sql e os parametro
@@ -108,7 +108,7 @@ def save(atr1:str, atr2:str) -> bool:
         cursor = con.cursor()
         # prepara um sql de insert
         sql = """
-        INSERT INTO DEMANDAS(atr1, atr2)
+        INSERT INTO OCORRENCIA(atr1, atr2)
         VALUES (:atr1, :atr2)
         """
         # passa os valores d eparametros
@@ -139,7 +139,7 @@ def update(id: int, atr1:str, atr2:str) -> bool:
         cursor = con.cursor()
         # prepara um sql de update
         sql = """
-              UPDATE DEMANDAS
+              UPDATE OCORRENCIA
               SET atr1 = :atr1, atr2 = :atr2
               WHERE id = :id
               """
@@ -171,7 +171,7 @@ def delete(id: int) -> bool:
         cursor = con.cursor()
         # prepara um sql de update
         sql = """
-              DELETE FROM DEMANDAS WHERE id = :id
+              DELETE FROM OCORRENCIA WHERE id = :id
               """
         # passa os valores de parametros
         params = [id]
@@ -191,3 +191,41 @@ def delete(id: int) -> bool:
             #fecha a conexão dando erro ou não
             con.close()
     return False
+
+# serve para o usuário ter as opções das categorias disponiveis e validacao tbm
+# vai retornar a pk e o nome, a pk vai servir dps para trocar o nome por ela
+def find_categories() -> tuple[dict[int,str]]:
+    """Retorna todas as categorias da tabela"""
+    con = None
+    try:
+        # pegar uma conexão com a função criada
+        con = get_connection()
+        cursor = con.cursor()
+        # preparando sql
+        sql = """
+              SELECT nm_categoria,cd_categoria FROM CATEGORIA
+        """
+        # pegar todos os dados da tabela, passando o sql
+        cursor.execute(sql)
+        #retorna uma 'list of tuples' com os dados que eu quero
+        lines = cursor.fetchall()
+        categories = []
+        #guardar os valores de lines
+        for line in lines:
+            #guarda cada coluna em seu respectivo atributo num dicionário
+            category = {
+                "nm_categoria": line[0],
+                "cd_categoria": line[1]
+            }
+            #guarda esse dicionário na lista
+            categories.append(category)
+        return categories
+    except Exception as e:
+        #mostra [ERRO] em bold vermelho + mensagem de erro
+        console.print(ERROR,e)
+    finally:
+        #serve para garantir que o con nã́o é none
+        if con:
+            #fecha a conexão dando erro ou não
+            con.close()
+    return []
