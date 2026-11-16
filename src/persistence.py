@@ -145,7 +145,7 @@ def save(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_categ
         # confirma as alterações
         con.commit()
         # printa que deu tudo certo, heuristica 1 de resposta
-        console.print(INFO, "inserido com sucesso!")
+        console.print(INFO, "[green]inserido com sucesso![/green]")
         return True
     except Exception as e:
         #mostra [ERRO] em bold vermelho + mensagem de erro
@@ -184,7 +184,7 @@ def update(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_cat
         # confirma as alterações
         con.commit()
         # printa que deu tudo certo, heuristica 1 de resposta
-        console.print(INFO, f"occurrencea {cd_categoria} atualizada com sucesso!")
+        console.print(INFO, f"[green]ocorrência {ds_protocolo} atualizada com sucesso![/green]")
         return True
     except Exception as e:
         #mostra [ERRO] em bold vermelho + mensagem de erro
@@ -214,7 +214,7 @@ def delete(cd_ocorrencia: int) -> bool:
         # confirma as alterações
         con.commit()
         # printa que deu tudo certo, heuristica 1 de resposta
-        console.print(INFO, f"occurrencea {cd_ocorrencia} excluída com sucesso!")
+        console.print(INFO, f"[green]ocorrência excluída com sucesso![/green]")
         return True
     except Exception as e:
         #mostra [ERRO] em bold vermelho + mensagem de erro
@@ -247,6 +247,7 @@ def find_categories() -> dict[int,str]:
         for line in lines:
             #guarda cada linha como uma cahve e item no dict
             categories[line[0]] = line[1]
+            console.print(INFO, f"[green]categorias encontradas com sucesso![/green]")
         return categories
     except Exception as e:
         #mostra [ERRO] em bold vermelho + mensagem de erro

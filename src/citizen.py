@@ -109,9 +109,11 @@ def register_occurrence() -> None:
         "ds_endereco": address["ds_endereco"]
     }
     # validando as regras, usando o kwargs pra desempacotar
-    confirmation, response = valid_occurrence(**occurrence)
-    if confirmation:
+    try:
+        confirmation, response = valid_occurrence(**occurrence)
+    except Except as e:
+        console.print(ERROR,"Algo deu errado na validação. Corrija os dados e tente novamente: ",e)
+    else:
         console.print(INFO,response)
         save(**occurrence)
-    else: console.print(ERROR,"Algo deu errado na validação. Corrija os dados e tente novamente.")
 
