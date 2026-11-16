@@ -44,13 +44,13 @@ def find_all() -> list[dict[str, Any]] | None:
         cursor.execute(sql)
         #retorna uma 'list of tuples' com os dados que eu quero
         lines = cursor.fetchall()
-        demands = []
+        occurrences = []
         # para prcurar a categoria correspondente ao pk.
         categories = find_categories()
         #guardar os valores de lines
         for line in lines:
             #guarda cada coluna em seu respectivo atributo num dicionário
-            demand = {
+            occurrence = {
                 "cd_ocorrencia": line[0],
                 "st_ocorrencia": line[1],
                 "ds_protocolo": line[2],
@@ -61,8 +61,8 @@ def find_all() -> list[dict[str, Any]] | None:
                 "dt_abertura": line[7]
             }
             #guarda esse dicionário na lista
-            demands.append(demand)
-        return demands
+            occurrences.append(occurrence)
+        return occurrences
     except Exception as e:
         #mostra [ERRO] em bold vermelho + mensagem de erro
         console.print(ERROR,e)
@@ -96,7 +96,7 @@ def find_by_id(id:int) -> dict[str,Any] | None:
         #verifica se a lina está vazia, se sim o registro não existe
         if not line:
             raise Exception("Esse ID não existe!")
-        demand = {
+        occurrence = {
             "cd_ocorrencia": line[0],
             "st_ocorrencia": line[1],
             "ds_protocolo": line[2],
@@ -106,7 +106,7 @@ def find_by_id(id:int) -> dict[str,Any] | None:
             "ds_endereco": line[6],
             "dt_abertura": line[7]
         }
-        return demand
+        return occurrence
     except Exception as e:
         #mostra [ERRO] em bold vermelho + mensagem de erro
         console.print(ERROR,e)
@@ -167,7 +167,7 @@ def update(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_cat
         # prepara um sql de update
         sql = """
               UPDATE OCORRENCIA 
-              SET st_ocorrencia = :set_ocorrencia,ds_protocolo = :ds_protocolo,
+              SET st_ocorrencia = :st_ocorrencia,ds_protocolo = :ds_protocolo,
                   ds_ocorrencia = :ds_ocorrencia,cd_categoria = :cd_categoria,
                   nm_bairro = :nm_bairro,ds_endereco = :ds_endereco
               WHERE cd_ocorrencia = :cd_ocorrencia
@@ -184,7 +184,7 @@ def update(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_cat
         # confirma as alterações
         con.commit()
         # printa que deu tudo certo, heuristica 1 de resposta
-        console.print(INFO, f"demanda {cd_categoria} atualizada com sucesso!")
+        console.print(INFO, f"occurrencea {cd_categoria} atualizada com sucesso!")
         return True
     except Exception as e:
         #mostra [ERRO] em bold vermelho + mensagem de erro
@@ -214,7 +214,7 @@ def delete(cd_ocorrencia: int) -> bool:
         # confirma as alterações
         con.commit()
         # printa que deu tudo certo, heuristica 1 de resposta
-        console.print(INFO, f"demanda {cd_ocorrencia} excluída com sucesso!")
+        console.print(INFO, f"occurrencea {cd_ocorrencia} excluída com sucesso!")
         return True
     except Exception as e:
         #mostra [ERRO] em bold vermelho + mensagem de erro
