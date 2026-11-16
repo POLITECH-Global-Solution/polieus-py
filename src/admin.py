@@ -80,9 +80,29 @@ def update_status() -> None:
     """Atualiza o status de uma ocorrência"""
     console.print(Panel.fit("[bold red]🔄 2. ATUALIZAR STATUS DE OCORRÊNCIA[/bold red]"))
     # SINCRONIZAR BANCO COM O ARQUIVO
-    find_all()
+    occurrences = find_all()
+    if occurrences == None:
+        return
     protocol = select_protocol()
     if not protocol:
         return
     console.print(f'{INFO}Protocolo selecionado para atualização: [bold]{protocol}[/bold]')
 
+    for occurrence in occurrences:
+        if occurrence["ds_protocol"] == protocol:
+            option = inquirer.select(
+                message="Selecione um novo status:",
+                choices=[
+                    Choice(value='EM_EXECUCAO', name="Em execução"),
+                    Choice(value='CONCLUIDA', name="Concluída"),
+                    Choice(value='NAO_APROVADA', name="Não aprovada"),
+                    Choice(value=0, name="✖️ Cancelar")
+                ],
+                default=0
+            ).execute()
+            if option == 0:
+                console.print(WARN,"Status não foi atualizado por cancelamento.")
+                return
+            occurrence["st_ocorrencia"] = option
+            console.print(INFO,f"Status de {protocol} atualizado para {option}")
+            return
