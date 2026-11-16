@@ -11,7 +11,7 @@ def get_address(cep:str) -> dict | None:
         response = requests.get(url, timeout=5, verify=False)
         match response.status_code:
             case 200:
-                data = resposta.json()
+                data = response.json()
                 # O ViaCEP retorna HTTP 200 com {"erro": true} quando o CEP não existe na base, isso vai servir para validar ele
                 if dados.get("erro"):
                     raise Exception("CEP inválido")
@@ -25,9 +25,9 @@ def get_address(cep:str) -> dict | None:
             case 404:
                 raise requests.exceptions.HTTPError("Serviço ou rota do CEP não encontrada (HTTP 404).")
             case 500 | 502 | 503 | 504:
-                raise requests.exceptions.HTTPError(f"Servidor do ViaCEP temporariamente indisponível (HTTP {resposta.status_code}).")
+                raise requests.exceptions.HTTPError(f"Servidor do ViaCEP temporariamente indisponível (HTTP {response.status_code}).")
             case _:
-                raise requests.exceptions.HTTPError(f"Retorno inesperado da API (HTTP {resposta.status_code}).")
+                raise requests.exceptions.HTTPError(f"Retorno inesperado da API (HTTP {response.status_code}).")
     except requests.Timeout as e:
         #vou mandar as mensagens todas pra onde chama
         raise requests.Timeout("Tempo limite esgotado: ", e)
