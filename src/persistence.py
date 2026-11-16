@@ -8,7 +8,7 @@ from config import ERROR, INFO
 
 console = Console()
 load_dotenv()
-CAMINHO_PROTOCOLOS_TXT = os.path.join("dados", "protocolos.txt")
+PROTOCOLS_PATH = os.path.join("dados", "protocols.txt")
 
 def get_connection():
     """Tenta conectar ao banco de dados Oracle
@@ -28,16 +28,16 @@ def get_connection():
         raise Exception(e)
 
 # isso aqui eu peguei na ia como registrado no 012
-def salvar_protocolos_txt(occurrences: list[dict[str, Any]]) -> None:
+def save_protocols(occurrences: list[dict[str, Any]]) -> None:
     """Reescreve o arquivo .txt com os protocolos atualizados para a busca fuzzy."""
-    os.makedirs(os.path.dirname(CAMINHO_PROTOCOLOS_TXT), exist_ok=True)
+    os.makedirs(os.path.dirname(PROTOCOLS_PATH), exist_ok=True)
 
-    with open(CAMINHO_PROTOCOLOS_TXT, "w", encoding="utf-8") as arquivo:
+    with open(PROTOCOLS_PATH, "w", encoding="utf-8") as file:
         for oc in occurrences:
             # Salva no formato: PRO-2026001 | Vila Maria | Registrada [IA]
             # vai dar pra pesquisar por bairro e status então
-            linha = f"{oc['ds_protocolo']} | {oc['nm_bairro']} | {oc['st_ocorrencia']}\n"
-            arquivo.write(linha)
+            line = f"{oc['ds_protocolo']} | {oc['nm_bairro']} | {oc['st_ocorrencia']}\n"
+            file.write(line)
 
 def find_all() -> list[dict[str, Any]] | None:
     """Retorna todas as ocorrências da tabela"""
@@ -75,7 +75,7 @@ def find_all() -> list[dict[str, Any]] | None:
             #guarda esse dicionário na lista
             occurrences.append(occurrence)
 
-        salvar_protocolos_txt(occurrences)
+        save_protocols(occurrences)
         return occurrences
     except Exception as e:
         #mostra [ERRO] em bold vermelho + mensagem de erro

@@ -119,7 +119,7 @@ def menu_admin() -> None:
             message="Selecione uma opção:",
             choices=[
                 Choice(value=1, name="🔍 1. Consultar ocorrências"),
-                Choice(value=2, name="🔄 2. Atualizar situação"),
+                Choice(value=2, name="🔄 2. Atualizar status"),
                 Choice(value=4, name="📊 3. Gerar relatórios"),
                 Choice(value=5, name="🚨 4. Consultar recorrências"),
                 Choice(value=0, name="↩️ 0. Voltar")
@@ -128,7 +128,7 @@ def menu_admin() -> None:
         ).execute()
         match option:
             case 1: a.consult_occurrence()
-            case 2: print("2")
+            case 2: a.update_status()
             case 3: print("3")
             case 4: print("4")
             case _: break
