@@ -110,56 +110,66 @@ def update_status() -> None:
 
 # essa função vai veriicar cada ocorrencia e guardar o bairro e categoria num dicionario
 # esse dicionario vai ter do outro ldo uma qauntidade, então e não existir ele ria mse não adiciona nesse valor
-def group_occurrence(ocurrences:list[dict[str,str]]) -> tuple[dict[str,int],dict[str,int]]:
+def group_occurrence(occurrences:list[dict[str,str]]) -> tuple[dict[str,int],dict[str,int]]:
     count_neighborhoods = {}
     count_categories = {}
-    for ocurrence in ocurrences:
+    for occurrence in occurrences:
         # pega o nome do bairro, se não existir diz que é NA, e vira contagem também
-        n = ocurrence.get("nm_bairro", "Bairro não informado")
+        n = occurrence.get("nm_bairro", "Bairro não informado")
         # vai adicionar o valor atual, se não houver o deault vai criar um com 0 e o +1 faz virar1
         count_neighborhoods[n] =  count_neighborhoods.setdefault(n, 0) + 1
         #mesmo pra categoria
-        c = ocurrence.get("ds_categoria", "Sem categoria")
+        c = occurrence.get("nm_categoria", "Sem categoria")
         count_categories[c] = count_categories.setdefault(c, 0) + 1
     return count_neighborhoods,count_categories
 
 def generate_reports() -> None:
-    ocurrences = find_all()
-    if not ocurrences:
+    occurrences = [
+        {"nm_bairro": "Vila Maria", "nm_categoria": "Pavimentação", "st_ocorrencia": "CONCLUIDA"},
+        {"nm_bairro": "Vila Maria", "nm_categoria": "Pavimentação", "st_ocorrencia": "EM_EXECUCAO"},
+        {"nm_bairro": "Vila Maria", "nm_categoria": "Acessibilidade", "st_ocorrencia": "REGISTRADA"},
+        {"nm_bairro": "Centro", "nm_categoria": "Acessibilidade", "st_ocorrencia": "CONCLUIDA"},
+        {"nm_bairro": "Centro", "nm_categoria": "Iluminação", "st_ocorrencia": "NAO_APROVADA"},
+        {"nm_bairro": "Pinheiros", "nm_categoria": "Saneamento", "st_ocorrencia": "EM_ANALISE"},
+        {"nm_bairro": "Pinheiros", "nm_categoria": "Pavimentação", "st_ocorrencia": "EM_EXECUCAO"},
+        {"nm_bairro": "Mooca", "nm_categoria": "Iluminação", "st_ocorrencia": "APROVADA"},
+    ]
+    if not occurrences:
         console.print(WARN,"Ocorrências não foram carregas corretamente, relatório não pôde ser gerado")
         return
     # o total de ocorrencias no banco
-    total = len(ocurrences)
+    total = len(occurrences)
     concluded = 0
     progress = 0
     blocked = 0
     others = 0
-    for occurrence in ocurrences:
+    for occurrence in occurrences:
         # classificar po status
         if occurrence["st_ocorrencia"] == "CONCLUIDA": concluded += 1
         elif occurrence["st_ocorrencia"] == "EM_EXECUCAO": progress += 1
         elif occurrence["st_ocorrencia"] == "NAO_APROVADA": blocked += 1
         else: others +=1
     # agrupando bairros
-    count_n,count_c = group_occurrence(ocurrences)
+    count_n,count_c = group_occurrence(occurrences)
     #formatando pra ficar mais facil
     neighborhoods = "[bold]OCORRÊNCIAS POR BAIRROS:[/bold]\n"
-    for k,v in count_n:
-        neighborhoods +=f"- {k}:\t{v}\n"
+    for k,v in count_n.items():
+        neighborhoods +=f"- {k}:\t\t{v}\n"
     categories = "[bold]OCORRÊNCIAS POR CATEGORIAS:[/bold]\n"
-    for k,v in count_c:
-        categories +=f"- {k}:\t{v}\n"
+    for k,v in count_c.items():
+        categories +=f"- {k}:\t\t{v}\n"
     # agora mostrar tudo
     console.print(Panel.fit(
         "📊 RELATÓRIO DE OCORRÊNCIAS\n"
         "===============================================\n"
-        f"[bold]TOTAL de ocorrências:[/bold] {total}\n"
+        f"[bold]TOTAL de ocorrências:[/bold]\t{total}\n"
         f"[bold]Concluídas:[/bold]\t\t {concluded}\n"
         f"[bold]Em andamento:[/bold]\t\t {progress}\n"
         f"[bold]Não aprovadas:[/bold]\t\t {blocked}\n"
-        f"[bold]Outras:[/bold]\t\t {others}\n"
+        f"[bold]Outras:[/bold]\t\t\t {others}\n"
         "===============================================\n"
         f"{neighborhoods}"
         "===============================================\n"
         f"{categories}"
     ))
+    print("Aperte ENTER para continuar...")
