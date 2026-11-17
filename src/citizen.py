@@ -1,6 +1,7 @@
 """
 Ações que podem ser realizadas pelos cidadãos
 """
+from typing import Any
 
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
@@ -32,7 +33,7 @@ def insert_desc() -> str:
         else:
             return desc
 
-def insert_cep() -> tuple[list[str,str]]:
+def insert_cep() -> tuple[str, dict[Any, Any] | None] | None:
     # o codifo daqui é quase igual, ele só valida se o CEP existe
     while True:
         try:
@@ -41,7 +42,7 @@ def insert_cep() -> tuple[list[str,str]]:
             if cep == 'SAIR':
                 cep = 'PREENCHER'
                 break
-            if cep== None or cep == "":
+            if cep is None or cep == "":
                 raise ValueError("O CEP não pode ser vazio")
             # pedi para a IA fazer, ele remove traços e espaços
             cep = re.sub(r"\D", "", cep)
@@ -52,7 +53,7 @@ def insert_cep() -> tuple[list[str,str]]:
         except Exception as e:
             console.print(ERROR,e)
         else:
-            return cep
+            return cep,address
 
 def insert_category()-> str:
     # só vai ser usada aqui, naquele map
