@@ -8,7 +8,7 @@ STATUS = ("REGISTRADA", "EM_ANALISE", "APROVADA", "EM_EXECUCAO", "CONCLUIDA", "N
 
 def load_categories() -> None:
     # pega apenas os nomes do banc e guarda como tupla (imutável)
-    CATEGORIAS = tuple(find_categories().values)
+    CATEGORIAS = tuple(find_categories().values())
 
 def valid_occurrence(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_categoria:str,ds_endereco:str) -> tuple[bool, str]:
     """Valida tipos, formatos e regras dos dados de uma ocorrência."""
