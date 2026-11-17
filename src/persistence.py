@@ -198,7 +198,7 @@ def save(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_categ
         categories = find_categories().items()
         cd_categoria = 0
         for cd,nm in categories:
-            if nm == nm_categoria: cd_categoria == cd
+            if nm == nm_categoria: cd_categoria = cd
         # passa os valores de parametros
         params = [st_ocorrencia,ds_protocolo,
                   ds_ocorrencia,cd_categoria,nm_bairro,ds_endereco]
@@ -238,7 +238,7 @@ def update(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_cat
         categories = find_categories().items()
         cd_categoria = 0
         for cd,nm in categories:
-            if nm == nm_categoria: cd_categoria == cd
+            if nm == nm_categoria: cd_categoria = cd
         # passa os valores de parametros
         params = [st_ocorrencia,ds_ocorrencia,cd_categoria,nm_bairro,ds_endereco,ds_protocolo]
         #atualiza os dados na tabela passando o sql criado e os parametro
