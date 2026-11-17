@@ -90,7 +90,7 @@ def update_status() -> None:
     console.print(f'{INFO}Protocolo selecionado para atualização: [bold]{protocol}[/bold]')
 
     for occurrence in occurrences:
-        if occurrence["ds_protocol"] == protocol:
+        if occurrence["ds_protocolo"] == protocol:
             option = inquirer.select(
                 message="Selecione um novo status:",
                 choices=[
