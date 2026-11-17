@@ -7,7 +7,7 @@ from InquirerPy.base.control import Choice
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
-from persistence import find_all
+from persistence import find_all, update
 from config import WARN, ERROR, INFO
 
 console = Console()
@@ -104,8 +104,13 @@ def update_status() -> None:
             if option == 0:
                 console.print(WARN,"Status não foi atualizado por cancelamento.")
                 return
+            old = occurrence.get("st_ocorrencia")
             occurrence["st_ocorrencia"] = option
-            console.print(INFO,f"Status de {protocol} atualizado para {option}")
+            if update(**occurrence):
+                console.print(INFO,f"Status de {protocol} atualizado para {option}")
+            else:
+                console.print(WARN,"Algum erro ocorreu, atualização cancelada")
+                occurrence["st_ocorrencia"] = old
             return
 
 # essa função vai veriicar cada ocorrencia e guardar o bairro e categoria num dicionario

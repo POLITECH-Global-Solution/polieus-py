@@ -229,10 +229,10 @@ def update(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_cat
         # prepara um sql de update
         sql = """
               UPDATE OCORRENCIA 
-              SET st_ocorrencia = :st_ocorrencia,ds_protocolo = :ds_protocolo,
+              SET st_ocorrencia = :st_ocorrencia,
                   ds_ocorrencia = :ds_ocorrencia,cd_categoria = :cd_categoria,
                   nm_bairro = :nm_bairro,ds_endereco = :ds_endereco
-              WHERE cd_ocorrencia = :cd_ocorrencia
+              WHERE ds_protocolo = :ds_protocolo
               """
         #procurar categoria certa
         categories = find_categories().items()
@@ -240,7 +240,7 @@ def update(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_cat
         for cd,nm in categories:
             if nm == nm_categoria: cd_categoria == cd
         # passa os valores de parametros
-        params = [st_ocorrencia,ds_protocolo,ds_ocorrencia,cd_categoria,nm_bairro,ds_endereco]
+        params = [st_ocorrencia,ds_ocorrencia,cd_categoria,nm_bairro,ds_endereco,ds_protocolo]
         #atualiza os dados na tabela passando o sql criado e os parametro
         cursor.execute(sql,params)
         # confirma as alterações
