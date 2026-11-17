@@ -309,7 +309,7 @@ def find_categories() -> dict[int,str]:
         for line in lines:
             #guarda cada linha como uma cahve e item no dict
             categories[line[0]] = line[1]
-            console.print(INFO, f"[green]categorias encontradas com sucesso![/green]")
+        console.print(INFO, f"[green]categorias encontradas com sucesso![/green]")
         return categories
     except Exception as e:
         #mostra [ERRO] em bold vermelho + mensagem de erro

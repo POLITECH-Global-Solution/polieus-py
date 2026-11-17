@@ -3,12 +3,11 @@ Garante que os dados sejam do tipo que as regras de negócio podem ser e de acor
 """
 from persistence import find_categories
 
-CATEGORIAS = ()
 STATUS = ("REGISTRADA", "EM_ANALISE", "APROVADA", "EM_EXECUCAO", "CONCLUIDA", "NAO_APROVADA")
 
-def load_categories() -> None:
+def load_categories() -> tuple[str, ...]:
     # pega apenas os nomes do banc e guarda como tupla (imutável)
-    CATEGORIAS = tuple(find_categories().values())
+    return tuple(find_categories().values())
 
 def valid_occurrence(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_categoria:str,ds_endereco:str) -> tuple[bool, str]:
     """Valida tipos, formatos e regras dos dados de uma ocorrência."""
@@ -21,9 +20,9 @@ def valid_occurrence(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:
         raise ValueError("O bairro deve ser informado corretamente.")
 
     # ve se tem aquela categoria no banco
-    load_categories()
-    if nm_categoria not in CATEGORIAS:
-        raise ValueError(f"Categoria inválida. Escolha entre: {', '.join(CATEGORIAS)}")
+    categories = load_categories()
+    if nm_categoria not in categories:
+        raise ValueError(f"Categoria inválida. Escolha entre: {', '.join(categories)}")
 
     # ve se a ocorrencia é valida
     if st_ocorrencia not in STATUS:
