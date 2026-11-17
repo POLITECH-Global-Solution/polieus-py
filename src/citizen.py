@@ -19,7 +19,7 @@ console = Console()
 
 def insert_desc() -> str:
     while True:
-        #try para tratar iunput
+        #try para tratar input
         try:
             #guardando num valor temporario
             desc = console.input("Digite a descrição da ocorrência: ")
@@ -46,9 +46,9 @@ def insert_cep() -> tuple[list[str,str]]:
             # pedi para a IA fazer, ele remove traços e espaços
             cep = re.sub(r"\D", "", cep)
             #agora vou verificar se ele mantem um tamanho de CEP, se não jogar excecao
-            if cep < 8:
-                raise ValueError("O CEP tem 8 dígitos. Verifique e tente novamente.")
-            address = get_address()
+            if len(cep) > 8:
+                raise ValueError("O CEP deve ter 8 dígitos. Verifique e tente novamente.")
+            address = get_address(cep)
         except Exception as e:
             console.print(ERROR,e)
         else:
