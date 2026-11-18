@@ -200,7 +200,7 @@ def save(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_categ
         for cd,nm in categories:
             if nm == nm_categoria: cd_categoria = cd
         # passa os valores de parametros
-        params = [st_ocorrencia,ds_protocolo,
+        params = [ds_protocolo,
                   ds_ocorrencia,cd_categoria,nm_bairro,ds_endereco]
         #insere os dados na tabela passando o sql criado e os parametro
         cursor.execute(sql,params)
