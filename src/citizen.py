@@ -8,7 +8,7 @@ from InquirerPy.base.control import Choice
 from rich.console import Console
 from rich.panel import Panel
 from config import ERROR, WARN, INFO
-from persistence import find_all, find_categories, save, find_by_citizen
+from persistence import find_categories, save, find_by_citizen
 from validation import valid_occurrence
 from service import get_address
 from rich.table import Table
@@ -24,9 +24,9 @@ def insert_desc() -> str:
         try:
             #guardando num valor temporario
             desc = console.input("Digite a descrição da ocorrência: ")
-            if desc == None or desc == "":
+            if desc is None or len(desc) < 5:
                 #jogando excecao
-                raise ValueError("A descrição da ocorrência não pode ser vazia")
+                raise ValueError("A descrição deve ter pelo menos 5 caracteres")
         except Exception as e:
             #error ja vem com estilos
             console.print(ERROR,e)
