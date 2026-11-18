@@ -107,9 +107,11 @@ def register_occurrence() -> None:
     if not completed: return
     console.print(INFO,"Preenchido com sucesso!")
     #crio o dict com todas as informaçẽs, gerando um PRotoclo aleatorio
+    protocol = f"PRO-{random.randint(1000000, 9999999)}"
+    console.print(INFO,f"[bold]Protocolo gerado:[/bold] [blue]{protocol}[/blue]")
     occurrence = {
         "st_ocorrencia": "REGISTRADA",
-        "ds_protocolo": f"PRO-{random.randint(1000000, 9999999)}",
+        "ds_protocolo": protocol,
         "ds_ocorrencia": desc,
         "nm_bairro": address["nm_bairro"],
         "nm_categoria": category,

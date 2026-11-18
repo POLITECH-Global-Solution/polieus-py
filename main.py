@@ -135,7 +135,7 @@ def menu_admin() -> None:
 def menu_help() -> None:
     """Mostra um resumo do nosso programa"""
     console.print(Panel.fit(
-        "Uma plataforma pública voltada para o cidadão e o gestor público, onde os munícipes podem:[blue]\n- registras ocorrências;\n- acompanhar o andamento delas;\n- monitorar o orçamento e indicadores da prefeitura.[/blue]\n E para a perfeitura:[blue]\n- Ver ocorrências agrupadas e ter ajuda na classificação, criação de prazos e na prioridade, além de auxílio na gestão da verba.[/blue]"
+        "Uma plataforma pública voltada para o cidadão e o gestor público, onde os munícipes podem:[blue]\n- registras ocorrências;\n- acompanhar o andamento delas;[/blue]\n E para a perfeitura:[blue]\n- Ver ocorrências\n- Atualizar status das ocorrências pesquisando por número do relatório\n- Gerar relatórios com agrupamentos das ocorrências.[/blue]"
     ))
     # Pra usuário ter tempo de ler
     input("pressione ENTER para voltar.")

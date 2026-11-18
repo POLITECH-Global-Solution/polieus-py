@@ -180,7 +180,7 @@ def find_by_citizen(cd_cidadao:int=67) -> list[dict[str,Any]]:
     return []
 
 #já pega um dicionário "desempacotando" ele
-def save(ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_categoria:str,ds_endereco:str) -> bool:
+def save(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_categoria:str,ds_endereco:str) -> bool:
     """Salva uma ocorrência no banco"""
     con = None
     try:
