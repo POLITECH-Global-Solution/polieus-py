@@ -180,7 +180,7 @@ def find_by_citizen(cd_cidadao:int=67) -> list[dict[str,Any]]:
     return []
 
 #já pega um dicionário "desempacotando" ele
-def save(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_categoria:str,ds_endereco:str) -> bool:
+def save(ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_categoria:str,ds_endereco:str) -> bool:
     """Salva uma ocorrência no banco"""
     con = None
     try:
@@ -219,7 +219,8 @@ def save(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_categ
             con.close()
     return False
 
-def update(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_categoria:str,ds_endereco:str) -> bool:
+def update(cd_ocorrencia:str,st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,
+           nm_bairro:str,nm_categoria:str,ds_endereco:str,dt_abertura:str) -> bool:
     """Retorna uma ocorrência pelo seu ID"""
     con = None
     try:
@@ -229,7 +230,8 @@ def update(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_cat
         # prepara um sql de update
         sql = """
               UPDATE OCORRENCIA 
-              SET st_ocorrencia = :st_ocorrencia,
+              SET cd_ocorrencia = :cd_ocorrencia,
+                  st_ocorrencia = :st_ocorrencia,
                   ds_ocorrencia = :ds_ocorrencia,cd_categoria = :cd_categoria,
                   nm_bairro = :nm_bairro,ds_endereco = :ds_endereco
               WHERE ds_protocolo = :ds_protocolo
@@ -240,7 +242,7 @@ def update(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_cat
         for cd,nm in categories:
             if nm == nm_categoria: cd_categoria = cd
         # passa os valores de parametros
-        params = [st_ocorrencia,ds_ocorrencia,cd_categoria,nm_bairro,ds_endereco,ds_protocolo]
+        params = [cd_ocorrencia,st_ocorrencia,ds_ocorrencia,cd_categoria,nm_bairro,ds_endereco,ds_protocolo]
         #atualiza os dados na tabela passando o sql criado e os parametro
         cursor.execute(sql,params)
         # confirma as alterações

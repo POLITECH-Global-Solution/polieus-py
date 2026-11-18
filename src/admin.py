@@ -129,16 +129,7 @@ def group_occurrence(occurrences:list[dict[str,str]]) -> tuple[dict[str,int],dic
     return count_neighborhoods,count_categories
 
 def generate_reports() -> None:
-    occurrences = [
-        {"nm_bairro": "Vila Maria", "nm_categoria": "Pavimentação", "st_ocorrencia": "CONCLUIDA"},
-        {"nm_bairro": "Vila Maria", "nm_categoria": "Pavimentação", "st_ocorrencia": "EM_EXECUCAO"},
-        {"nm_bairro": "Vila Maria", "nm_categoria": "Acessibilidade", "st_ocorrencia": "REGISTRADA"},
-        {"nm_bairro": "Centro", "nm_categoria": "Acessibilidade", "st_ocorrencia": "CONCLUIDA"},
-        {"nm_bairro": "Centro", "nm_categoria": "Iluminação", "st_ocorrencia": "NAO_APROVADA"},
-        {"nm_bairro": "Pinheiros", "nm_categoria": "Saneamento", "st_ocorrencia": "EM_ANALISE"},
-        {"nm_bairro": "Pinheiros", "nm_categoria": "Pavimentação", "st_ocorrencia": "EM_EXECUCAO"},
-        {"nm_bairro": "Mooca", "nm_categoria": "Iluminação", "st_ocorrencia": "APROVADA"},
-    ]
+    occurrences = find_all()
     if not occurrences:
         console.print(WARN,"Ocorrências não foram carregas corretamente, relatório não pôde ser gerado")
         return
