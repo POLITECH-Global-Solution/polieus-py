@@ -94,7 +94,7 @@ def update_status() -> None:
             option = inquirer.select(
                 message="Selecione um novo status:",
                 choices=[
-                    Choice(value='EM_EXECUCAO', name="Em execução"),
+                    Choice(value='EM_ANDAMENTO', name="Em andamento"),
                     Choice(value='CONCLUIDA', name="Concluída"),
                     Choice(value='NAO_APROVADA', name="Não aprovada"),
                     Choice(value=0, name="✖️ Cancelar")

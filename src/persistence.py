@@ -191,7 +191,7 @@ def save(st_ocorrencia:str,ds_protocolo:str,ds_ocorrencia,nm_bairro:str,nm_categ
         sql = """
         INSERT INTO OCORRENCIA(st_ocorrencia,ds_protocolo,ds_ocorrencia,cd_cidadao,
                                cd_categoria,nm_bairro,ds_endereco,dt_abertura)
-        VALUES (:st_ocorrencia,:ds_protocolo,:ds_ocorrencia,67
+        VALUES ('PENDENTE',:ds_protocolo,:ds_ocorrencia,67,
                 :cd_categoria,:nm_bairro,:ds_endereco,current_date)
         """
         # para pegar a PK certa da categoria no banco, vai retornar uma tupla de pares
@@ -319,4 +319,4 @@ def find_categories() -> dict[int,str]:
         if con:
             #fecha a conexão dando erro ou não
             con.close()
-    return []
+    return {}

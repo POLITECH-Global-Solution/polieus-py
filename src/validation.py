@@ -3,7 +3,7 @@ Garante que os dados sejam do tipo que as regras de negócio podem ser e de acor
 """
 from persistence import find_categories
 
-STATUS = ("REGISTRADA", "EM_ANALISE", "APROVADA", "EM_EXECUCAO", "CONCLUIDA", "NAO_APROVADA")
+STATUS = ("PENDENTE", "EM_ANALISE", "EM_ANDAMENTO", "CONCLUIDA", "NAO_APROVADA")
 
 def load_categories() -> tuple[str, ...]:
     # pega apenas os nomes do banc e guarda como tupla (imutável)
